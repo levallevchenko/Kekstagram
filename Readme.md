@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Анна Левченко](https://up.htmlacademy.ru/javascript/19/user/506463).
-* Наставник: `Неизвестно`.
+* Наставник: `Евгений Алипкин`.
 
 ---
 
