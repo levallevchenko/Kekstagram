@@ -24,21 +24,20 @@ var getRandomElemFromArr = function (arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
-var pictures = [];
-
 var getPictures = function () {
+  var picturesResult = [];
   for (i = 0; i < PICTURES_NUMBER; i++) {
-    pictures[i] = {
+    picturesResult[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       description: getRandomElemFromArr(pictureProperties.description),
       likes: getRandomItem(LIKES_MIN, LIKES_MAX),
       comments: getRandomElemFromArr(pictureProperties.comments),
     };
   }
-  return pictures;
+  return picturesResult;
 };
 
-getPictures();
+var pictures = getPictures();
 
 var pictureList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
