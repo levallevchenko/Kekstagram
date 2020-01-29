@@ -1,7 +1,6 @@
 'use strict';
 
 var PICTURES_NUMBER = 25;
-var AVATARS_NUMBER = 6;
 var LIKES_MIN = 15;
 var LIKES_MAX = 200;
 var COMMENTS_MIN = 0;
@@ -61,16 +60,14 @@ for (var i = 0; i < PICTURES_NUMBER; i++) {
 }
 pictureList.appendChild(fragment);
 
-
 var bigPicture = document.querySelector('.big-picture');
 var pictureImage = bigPicture.querySelector('.big-picture__img img');
 var pictureLikes = bigPicture.querySelector('.likes-count');
 var pictureCommentsNumber = bigPicture.querySelector('.comments-count');
-var pictureCaption = bigPicture.querySelector('.social__caption')
-// Покажите элемент .big-picture
+var pictureCaption = bigPicture.querySelector('.social__caption');
+
 bigPicture.classList.remove('hidden');
 
-// Заполняем большую картинку
 var fillBigPicture = function (picture) {
   pictureImage.src = picture.url;
   pictureLikes.textContent = picture.likes;
@@ -80,7 +77,7 @@ var fillBigPicture = function (picture) {
 
 fillBigPicture(pictures[0]);
 
-var socialCommentsList = bigPicture.querySelector('.social__comments')
+var socialCommentsList = bigPicture.querySelector('.social__comments');
 var socialComment = bigPicture.querySelector('.social__comment');
 
 var comment = socialComment.cloneNode(true);
@@ -95,10 +92,7 @@ var fillComment = function (picture) {
 
 fillComment(pictures[0]);
 
-console.log(socialComment);
-
 socialCommentsList.appendChild(comment);
-
 
 var socialCommentCount = bigPicture.querySelector('.social__comment-count');
 socialCommentCount.classList.add('hidden');
