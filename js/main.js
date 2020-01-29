@@ -99,3 +99,5 @@ socialCommentCount.classList.add('hidden');
 
 var commentsLoader = bigPicture.querySelector('.comments-loader');
 commentsLoader.classList.add('hidden');
+
+document.querySelector('body').classList.add('modal-open');
