@@ -90,7 +90,7 @@ var fillComment = function (picture) {
   commentText.textContent = picture.commentsText;
 };
 
-fillComment(pictures[0]);
+fillComment(pictures[1]);
 
 socialCommentsList.appendChild(comment);
 
