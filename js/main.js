@@ -5,6 +5,7 @@ var LIKES_MIN = 15;
 var LIKES_MAX = 200;
 var COMMENTS_MIN = 0;
 var COMMENTS_MAX = 200;
+var ESC_KEY = 'Escape';
 
 var pictureProperties = {
   names: ['Михаил', 'Катя', 'Марк', 'Олечка', 'Маруся', 'BigMan', 'Тундра'],
@@ -66,7 +67,7 @@ var pictureLikes = bigPicture.querySelector('.likes-count');
 var pictureCommentsNumber = bigPicture.querySelector('.comments-count');
 var pictureCaption = bigPicture.querySelector('.social__caption');
 
-bigPicture.classList.remove('hidden');
+// bigPicture.classList.remove('hidden');
 
 var fillBigPicture = function (picture) {
   pictureImage.src = picture.url;
@@ -101,3 +102,105 @@ var commentsLoader = bigPicture.querySelector('.comments-loader');
 commentsLoader.classList.add('hidden');
 
 document.querySelector('body').classList.add('modal-open');
+
+
+// Новое задание:
+
+var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
+
+var closefullScreen = function () {
+  bigPicture.classList.add('hidden');
+};
+
+bigPictureClose.addEventListener('click', function () {
+  closefullScreen();
+});
+
+// При наступлении события change на поле #upload-file, можно показывать форму редактирования изображения .img-upload__overlay
+var imageUpload = document.querySelector('.img-upload');
+var imageSetup = imageUpload.querySelector('.img-upload__overlay');
+var uploadFile = imageUpload.querySelector('#upload-file');
+
+var openUploadSetup = function () {
+  imageSetup.classList.remove('hidden');
+  document.addEventListener('keydown', onCloseUploadSetupEscPress);
+};
+
+uploadFile.addEventListener('change', function () {
+  openUploadSetup();
+});
+
+// Закрыть форму пользователь может нажатием кнопки #upload-cancel, либо нажатием клавиши Esc.
+var uploadCancel = imageUpload.querySelector('#upload-cancel');
+
+var onCloseUploadSetupEscPress = function (evt) {
+  if (evt.key === ESC_KEY) {
+    closeUploadSetup();
+  }
+};
+
+var closeUploadSetup = function () {
+  imageSetup.classList.add('hidden');
+  document.removeEventListener('keydown', onCloseUploadSetupEscPress);
+  // при закрытии формы, дополнительно необходимо сбрасывать значение поля выбора файла #upload-file
+  uploadFile.value = '';
+};
+
+uploadCancel.addEventListener('click', function () {
+  closeUploadSetup();
+});
+
+// Применение эффекта для изображения и редактирование размера изображения
+var effectLevelLine = imageUpload.querySelector('.effect-level__line');
+var effectLevelPin = imageUpload.querySelector('.effect-level__pin');
+var effectLevelDepth = imageUpload.querySelector('.effect-level__depth');
+var effectsList = imageUpload.querySelector('.effects__list');
+
+imageSetup.classList.remove('hidden');
+
+var ONE_HUNDRED_PERCENT = 100;
+var EFFECT_PIN_LEFT_START = '20%';
+var effectLevelLineWidth = effectLevelLine.offsetWidth;
+var onePercentEffectLevelLineWidth = effectLevelLineWidth / ONE_HUNDRED_PERCENT;
+
+
+var onEffectLevelPinMouseup = function (evt) {
+  var pinLeft = evt.offsetX / onePercentEffectLevelLineWidth;
+  var pinLeftString = String(pinLeft);
+  effectLevelPin.style.left = pinLeftString + '%';
+  effectLevelDepth.style.width = pinLeftString + '%';
+};
+
+effectLevelLine.addEventListener('mouseup', onEffectLevelPinMouseup);
+
+var onEffectsListClick = function () {
+  effectLevelPin.style.left = EFFECT_PIN_LEFT_START;
+  effectLevelDepth.style.width = EFFECT_PIN_LEFT_START;
+};
+
+effectsList.addEventListener('click', onEffectsListClick);
+
+// Валидация хеш-тегов
+// var imageUploadForm = document.querySelector('.img-upload__form');
+// var hashtags = imageSetup.querySelector('.text__hashtags');
+
+// var onImageUploadFormSubmit = function () {
+//   evt.preventDefault();
+//   imageSetup.classList.add('hidden');
+//   var hashtagsValue = hashtags.value;
+//   var hashtagsArr = hashtagsValue.split(' ', 5); // не работает
+
+//   Есть ли повторяющиеся хештеги
+//   for (var h = 0; h < hashtagsArr; h++) {
+//     for (var j = 1; j < hashtagsArr; h++) {
+//     if (hashtagsArr[h] !== hashtagsArr[j]) {
+
+//     }
+//   }
+// };
+
+// imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
+
+
+// Набор из букв и цифр (латиница + кириллица):
+// [а-яА-ЯёЁa-zA-Z0-9]+$
