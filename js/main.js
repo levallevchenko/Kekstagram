@@ -205,50 +205,50 @@ var onHashtagInputInput = function () {
   });
   if (!allWordsStartWithHash) {
     hashtagsInput.setCustomValidity('Хэш-тег должен начинаться с символа #');
-  } else {
-    hashtagsInput.setCustomValidity('');
+    return;
   }
 
   // Проверяет, что хештег не больше 20 символов
   var getMaxHashLength = hashtagsArr.every(function (word) {
     return word.length < 20;
   });
-
   if (!getMaxHashLength) {
     hashtagsInput.setCustomValidity('Длина хеш-тега не должна быть больше 20 символов');
-  } else {
-    hashtagsInput.setCustomValidity('');
+    return;
   }
 
   // Проверяет, что хеш-тегов не больше 5
   if (hashtagsArr.length > 5) {
     hashtagsInput.setCustomValidity('Должно быть не больше 5 хештегов');
-  } else {
-    hashtagsInput.setCustomValidity('');
+    return;
   }
 
   // Проверяет, что хеш-тег после # содержит только буквы и цифры
-
   var checkWordsConsist = hashtagsArr.every(function (word) {
     return word.search(REG);
   });
-
   if (!checkWordsConsist) {
     hashtagsInput.setCustomValidity('Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы и символы');
-  } else {
-    hashtagsInput.setCustomValidity('');
+    return;
   }
 
   // Проверяет, есть ли повторяющиеся хеш-теги
-  var getSameHashtags = hashtagsArr.every(function (word) {
-    return hashtagsArr.indexOf(word) !== -1;
-  });
+  // var getSameHashtags = hashtagsArr.every(function (word) {
+  //   return hashtagsArr.indexOf(word) !== -1;
+  // })
 
-  if (!getSameHashtags) {
+  var getSameHashtags = function () {
+    hashtagsArr.forEach(function (item, j, arr) {
+      return arr.slice(-arr.length + 1 + j).indexOf(item) !== -1;
+    });
+  };
+
+  if (getSameHashtags) {
     hashtagsInput.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
-  } else {
-    hashtagsInput.setCustomValidity('');
+    return;
   }
+
+  hashtagsInput.setCustomValidity('');
 };
 
 var onImageUploadFormSubmit = function (evt) {
@@ -256,7 +256,7 @@ var onImageUploadFormSubmit = function (evt) {
   imageSetup.classList.add('hidden');
 };
 
-hashtagsInput.addEventListener('input', function () {
+hashtagsInput.addEventListener('change', function () {
   onHashtagInputInput();
 });
 
