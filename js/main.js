@@ -187,6 +187,7 @@ effectsList.addEventListener('click', onEffectsListClick);
 
 // Валидация хеш-тегов
 var imageUploadForm = document.querySelector('.img-upload__form');
+var imageUploadSubmit = imageUploadForm.querySelector('.img-upload__submit');
 var hashtagsInput = imageSetup.querySelector('.text__hashtags');
 
 
@@ -199,13 +200,54 @@ var onHashtagInputInput = function () {
   var hashtagsArr = hashtagsValueLower.trim().split(' '); // записывает значения в массив и удаляет пробельные символы
 
   // Проверяет, что первый символ решётка;
-  var getFirstSymbol = hashtagsArr.every(function (word) {
-    return word.indexOf('#') === 1;
+  var allWordsStartWithHash = hashtagsArr.every(function (word) {
+    return word.indexOf('#') === 0;
   });
-  if (!getFirstSymbol) {
+  if (!allWordsStartWithHash) {
     hashtagsInput.setCustomValidity('Хэш-тег должен начинаться с символа #');
   } else {
-    hashtagsInput.setCustomValidity(' ');
+    hashtagsInput.setCustomValidity('');
+  }
+
+  // Проверяет, что хештег не больше 20 символов
+  var getMaxHashLength = hashtagsArr.every(function (word) {
+    return word.length < 20;
+  });
+
+  if (!getMaxHashLength) {
+    hashtagsInput.setCustomValidity('Длина хеш-тега не должна быть больше 20 символов');
+  } else {
+    hashtagsInput.setCustomValidity('');
+  }
+
+  // Проверяет, что хеш-тегов не больше 5
+  if (hashtagsArr.length > 5) {
+    hashtagsInput.setCustomValidity('Должно быть не больше 5 хештегов');
+  } else {
+    hashtagsInput.setCustomValidity('');
+  }
+
+  // Проверяет, что хеш-тег после # содержит только буквы и цифры
+
+  var checkWordsConsist = hashtagsArr.every(function (word) {
+    return word.search(REG);
+  });
+
+  if (!checkWordsConsist) {
+    hashtagsInput.setCustomValidity('Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы и символы');
+  } else {
+    hashtagsInput.setCustomValidity('');
+  }
+
+  // Проверяет, есть ли повторяющиеся хеш-теги
+  var getSameHashtags = hashtagsArr.every(function (word) {
+    return hashtagsArr.indexOf(word) !== -1;
+  });
+
+  if (!getSameHashtags) {
+    hashtagsInput.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
+  } else {
+    hashtagsInput.setCustomValidity('');
   }
 };
 
@@ -218,33 +260,15 @@ hashtagsInput.addEventListener('input', function () {
   onHashtagInputInput();
 });
 
-imageUploadForm.addEventListener('submit', function () {
-  onImageUploadFormSubmit();
-});
+imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
 
-//  // Проверяет остальные символы
-//   hashtagsArr.every(function (word) {
-//     return word.search(REG);
-//   });
-
-// Если вам надо просто узнать, подпадает ли строка под регулярное выражение, используйте метод search().
-  // Проверяет остальные символы
-  // for (var i = 1; i < hashtagsArr.length; i++) {
-  //   if (hashtagsArr[i].search(REG)) {
-  //     return hashtagsInput.setCustomValidity('Всё верно');
-  //   }
-  // }
-// Набор из букв и цифр (латиница + кириллица):
-// [а-яА-ЯёЁa-zA-Z0-9]+$
-
-
-// хэш-тег начинается с символа # (решётка);
+// хэш-тег начинается с символа # (решётка); +
 // строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.;
 // хеш-тег не может состоять только из одной решётки; +
-// максимальная длина одного хэш-тега 20 символов, включая решётку;
+// максимальная длина одного хэш-тега 20 символов, включая решётку; +-
 // хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом; +
 // хэш-теги разделяются пробелами; +
 // один и тот же хэш-тег не может быть использован дважды;
-// нельзя указать больше пяти хэш-тегов;
-// хэш-теги необязательны;
+// нельзя указать больше пяти хэш-тегов; +
+// хэш-теги необязательны; +
 // если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
