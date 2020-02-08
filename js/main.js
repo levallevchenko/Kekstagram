@@ -183,7 +183,7 @@ var onEffectsListClick = function () {
   effectLevelDepth.style.width = EFFECT_PIN_LEFT_START;
 };
 
-effectsRadios.forEach(function (radio, index, arr) {
+effectsRadios.forEach(function (radio) {
   radio.addEventListener('click', onEffectsListClick);
 });
 
@@ -208,14 +208,14 @@ var onHashtagInputInput = function () {
   }
 
   var getMaxHashLength = hashtagsArr.every(function (word) {
-    return word.length < 20;
+    return word.length < MAX_HASHTAG_LENGTH;
   });
   if (!getMaxHashLength) {
     hashtagsInput.setCustomValidity('Длина хеш-тега не должна быть больше 20 символов');
     return;
   }
 
-  if (hashtagsArr.length > 5) {
+  if (hashtagsArr.length > MAX_HASHTAGS) {
     hashtagsInput.setCustomValidity('Должно быть не больше 5 хештегов');
     return;
   }
