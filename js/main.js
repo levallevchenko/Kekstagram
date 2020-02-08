@@ -150,11 +150,11 @@ uploadCancel.addEventListener('click', function () {
   closeUploadSetup();
 });
 
-// Применение эффекта для изображения и редактирование размера изображения
+// Применение эффекта для изображения
 var effectLevelLine = imageUpload.querySelector('.effect-level__line');
 var effectLevelPin = imageUpload.querySelector('.effect-level__pin');
 var effectLevelDepth = imageUpload.querySelector('.effect-level__depth');
-var effectsList = imageUpload.querySelector('.effects__list');
+var effectsRadios = imageUpload.querySelectorAll('.effects__radio');
 
 imageSetup.classList.remove('hidden');
 
@@ -183,13 +183,13 @@ var onEffectsListClick = function () {
   effectLevelDepth.style.width = EFFECT_PIN_LEFT_START;
 };
 
-effectsList.addEventListener('click', onEffectsListClick);
+effectsRadios.forEach(function (radio, index, arr) {
+  radio.addEventListener('click', onEffectsListClick);
+});
 
 // Валидация хеш-тегов
 var imageUploadForm = document.querySelector('.img-upload__form');
-var imageUploadSubmit = imageUploadForm.querySelector('.img-upload__submit');
 var hashtagsInput = imageSetup.querySelector('.text__hashtags');
-
 
 var onHashtagInputInput = function () {
   var MAX_HASHTAG_LENGTH = 20;
@@ -197,9 +197,8 @@ var onHashtagInputInput = function () {
   var REG = /^[а-яА-ЯёЁa-zA-Z0-9]+$/;
   var hashtagsValue = hashtagsInput.value;
   var hashtagsValueLower = hashtagsValue.toLowerCase();
-  var hashtagsArr = hashtagsValueLower.trim().split(' '); // записывает значения в массив и удаляет пробельные символы
+  var hashtagsArr = hashtagsValueLower.trim().split(' ');
 
-  // Проверяет, что первый символ решётка;
   var allWordsStartWithHash = hashtagsArr.every(function (word) {
     return word.indexOf('#') === 0;
   });
@@ -208,7 +207,6 @@ var onHashtagInputInput = function () {
     return;
   }
 
-  // Проверяет, что хештег не больше 20 символов
   var getMaxHashLength = hashtagsArr.every(function (word) {
     return word.length < 20;
   });
@@ -217,33 +215,31 @@ var onHashtagInputInput = function () {
     return;
   }
 
-  // Проверяет, что хеш-тегов не больше 5
   if (hashtagsArr.length > 5) {
     hashtagsInput.setCustomValidity('Должно быть не больше 5 хештегов');
     return;
   }
 
-  // Проверяет, что хеш-тег после # содержит только буквы и цифры
   var checkWordsConsist = hashtagsArr.every(function (word) {
-    return word.search(REG);
+    return REG.test(word.slice(1));
   });
   if (!checkWordsConsist) {
     hashtagsInput.setCustomValidity('Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы и символы');
     return;
   }
 
-  // Проверяет, есть ли повторяющиеся хеш-теги
-  // var getSameHashtags = hashtagsArr.every(function (word) {
-  //   return hashtagsArr.indexOf(word) !== -1;
-  // })
-
   var getSameHashtags = function () {
-    hashtagsArr.forEach(function (item, j, arr) {
-      return arr.slice(-arr.length + 1 + j).indexOf(item) !== -1;
+    var result;
+    hashtagsArr.forEach(function (hashtag, index, arr) {
+      var isInArray = arr.indexOf(hashtag, index + 1) !== -1;
+      if (!result && isInArray) {
+        result = true;
+      }
     });
+    return result;
   };
 
-  if (getSameHashtags) {
+  if (getSameHashtags()) {
     hashtagsInput.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
     return;
   }
@@ -256,7 +252,7 @@ var onImageUploadFormSubmit = function (evt) {
   imageSetup.classList.add('hidden');
 };
 
-hashtagsInput.addEventListener('change', function () {
+hashtagsInput.addEventListener('input', function () {
   onHashtagInputInput();
 });
 
