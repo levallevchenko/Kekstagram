@@ -120,6 +120,9 @@ bigPictureClose.addEventListener('click', function () {
 var imageUpload = document.querySelector('.img-upload');
 var imageSetup = imageUpload.querySelector('.img-upload__overlay');
 var uploadFile = imageUpload.querySelector('#upload-file');
+var imageUploadForm = imageUpload.querySelector('.img-upload__form');
+var hashtagsInput = imageSetup.querySelector('.text__hashtags');
+var imageComment = imageSetup.querySelector('.text__description');
 
 var openUploadSetup = function () {
   imageSetup.classList.remove('hidden');
@@ -128,9 +131,12 @@ var openUploadSetup = function () {
 
 uploadFile.addEventListener('change', function () {
   openUploadSetup();
+  var effectLevelLine = imageSetup.querySelector('.effect-level__line');
+  var effectLevelLineWidth = effectLevelLine.offsetWidth;
+  var onePercentEffectLevelLineWidth = effectLevelLineWidth / ONE_HUNDRED_PERCENT;
+  return onePercentEffectLevelLineWidth;
 });
 
-// Закрыть форму пользователь может нажатием кнопки #upload-cancel, либо нажатием клавиши Esc.
 var uploadCancel = imageUpload.querySelector('#upload-cancel');
 
 var onCloseUploadSetupEscPress = function (evt) {
@@ -142,36 +148,33 @@ var onCloseUploadSetupEscPress = function (evt) {
 var closeUploadSetup = function () {
   imageSetup.classList.add('hidden');
   document.removeEventListener('keydown', onCloseUploadSetupEscPress);
-  // при закрытии формы, дополнительно необходимо сбрасывать значение поля выбора файла #upload-file
   uploadFile.value = '';
+  hashtagsInput.value = '';
+  imageComment.value = '';
 };
 
 uploadCancel.addEventListener('click', function () {
   closeUploadSetup();
 });
 
-// Применение эффекта для изображения
-var effectLevelLine = imageUpload.querySelector('.effect-level__line');
-var effectLevelPin = imageUpload.querySelector('.effect-level__pin');
-var effectLevelDepth = imageUpload.querySelector('.effect-level__depth');
-var effectsRadios = imageUpload.querySelectorAll('.effects__radio');
-
-imageSetup.classList.remove('hidden');
+var effectLevelLine = document.querySelector('.effect-level__line');
+var effectLevelPin = imageSetup.querySelector('.effect-level__pin');
+var effectLevelDepth = imageSetup.querySelector('.effect-level__depth');
+var effectsRadios = imageSetup.querySelectorAll('.effects__radio');
 
 var ONE_HUNDRED_PERCENT = 100;
 var EFFECT_PIN_LEFT_START = '20%';
-var effectLevelLineWidth = effectLevelLine.offsetWidth;
-var onePercentEffectLevelLineWidth = effectLevelLineWidth / ONE_HUNDRED_PERCENT;
-
 
 var onEffectLevelPinMouseup = function (evt) {
+  var effectLevelLineWidth = effectLevelLine.offsetWidth;
+  var onePercentEffectLevelLineWidth = effectLevelLineWidth / ONE_HUNDRED_PERCENT;
+  var pinLeft = evt.offsetX / onePercentEffectLevelLineWidth;
+  var pinLeftString = String(pinLeft);
   var target = evt.target;
   var isClickOnPin = target.classList.contains('effect-level__pin');
   if (isClickOnPin) {
     return;
   }
-  var pinLeft = evt.offsetX / onePercentEffectLevelLineWidth;
-  var pinLeftString = String(pinLeft);
   effectLevelPin.style.left = pinLeftString + '%';
   effectLevelDepth.style.width = pinLeftString + '%';
 };
@@ -187,10 +190,6 @@ effectsRadios.forEach(function (radio) {
   radio.addEventListener('click', onEffectsListClick);
 });
 
-// Валидация хеш-тегов
-var imageUploadForm = document.querySelector('.img-upload__form');
-var hashtagsInput = imageSetup.querySelector('.text__hashtags');
-
 var onHashtagInputInput = function () {
   var MAX_HASHTAG_LENGTH = 20;
   var MAX_HASHTAGS = 5;
@@ -199,9 +198,15 @@ var onHashtagInputInput = function () {
   var hashtagsValueLower = hashtagsValue.toLowerCase();
   var hashtagsArr = hashtagsValueLower.trim().split(' ');
 
+  if (hashtagsValue === '') {
+    hashtagsInput.setCustomValidity('');
+    return;
+  }
+
   var allWordsStartWithHash = hashtagsArr.every(function (word) {
     return word.indexOf('#') === 0;
   });
+
   if (!allWordsStartWithHash) {
     hashtagsInput.setCustomValidity('Хэш-тег должен начинаться с символа #');
     return;
@@ -250,6 +255,9 @@ var onHashtagInputInput = function () {
 var onImageUploadFormSubmit = function (evt) {
   evt.preventDefault();
   imageSetup.classList.add('hidden');
+  uploadFile.value = '';
+  hashtagsInput.value = '';
+  imageComment.value = '';
 };
 
 hashtagsInput.addEventListener('input', function () {
@@ -257,14 +265,3 @@ hashtagsInput.addEventListener('input', function () {
 });
 
 imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
-
-// хэш-тег начинается с символа # (решётка); +
-// строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.;
-// хеш-тег не может состоять только из одной решётки; +
-// максимальная длина одного хэш-тега 20 символов, включая решётку; +-
-// хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом; +
-// хэш-теги разделяются пробелами; +
-// один и тот же хэш-тег не может быть использован дважды;
-// нельзя указать больше пяти хэш-тегов; +
-// хэш-теги необязательны; +
-// если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
