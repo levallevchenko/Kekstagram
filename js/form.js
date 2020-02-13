@@ -1,7 +1,5 @@
 'use strict';
 
-// form.js
-
 (function () {
   var ONE_HUNDRED_PERCENT = 100;
   var EFFECT_PIN_LEFT_START = '20%';
@@ -151,4 +149,5 @@
   });
 
   imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
+
 }());

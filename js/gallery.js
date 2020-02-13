@@ -1,6 +1,5 @@
 'use strict';
 
-// gallery.js
 (function () {
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -30,4 +29,5 @@
     pictures: pictures,
     renderPictures: renderPictures,
   };
+
 })();

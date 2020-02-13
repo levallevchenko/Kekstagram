@@ -1,6 +1,5 @@
 'use strict';
 
-// preview.js
 (function () {
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
@@ -58,5 +57,10 @@
 
   bigPictureClose.addEventListener('click', onBigPictureCloseClick);
   document.addEventListener('keycode', onBigPictureCloseEnterKeydown);
+
+  window.preview = {
+    fillComment: fillComment,
+  };
+
 })();
 
