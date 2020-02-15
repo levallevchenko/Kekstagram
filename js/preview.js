@@ -14,7 +14,7 @@
   var socialCommentCount = bigPicture.querySelector('.social__comment-count');
   var commentsLoader = bigPicture.querySelector('.comments-loader');
 
-  bigPicture.classList.remove('hidden');
+  // bigPicture.classList.remove('hidden');
 
   var fillBigPicture = function (picture) {
     pictureImage.src = picture.url;

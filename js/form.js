@@ -22,6 +22,8 @@
   var effectLevelDepth = imageSetup.querySelector('.effect-level__depth');
   var effectsRadios = imageSetup.querySelectorAll('.effects__radio');
 
+  imageSetup.classList.remove('hidden');
+
   var openUploadSetup = function () {
     imageSetup.classList.remove('hidden');
     document.addEventListener('keydown', onCloseUploadSetupEscPress);
