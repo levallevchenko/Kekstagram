@@ -1,12 +1,24 @@
 'use strict';
 
 (function () {
-
+  var AVATAR_NUMBER = 6;
   var PICTURES_NUMBER = 25;
   var LIKES_MIN = 15;
   var LIKES_MAX = 200;
   var COMMENTS_MIN = 0;
   var COMMENTS_MAX = 200;
+
+
+  var FolderMap = {
+    PICTURE: 'photos/',
+    AVATAR: 'img/avatar-'
+  };
+
+  var FormatMap = {
+    PICTURE: '.jpg',
+    AVATAR: '.svg'
+  };
+
   var mocks = {
     names: ['Михаил', 'Катя', 'Марк', 'Олечка', 'Маруся', 'BigMan', 'Тундра'],
     descriptions: ['На море', 'После дождя', 'Я и моя семья', 'Любимый пёс', 'Первый снег', 'Мой ДР'],
@@ -22,8 +34,9 @@
     var picturesResult = [];
     for (var i = 0; i < PICTURES_NUMBER; i++) {
       picturesResult[i] = {
-        url: 'photos/' + (i + 1) + '.jpg',
-        avatarUrl: 'img/avatar-' + (i + 1) + '.svg',
+        id: i,
+        url: FolderMap.PICTURE + (i + 1) + FormatMap.PICTURE,
+        avatarUrl: FolderMap.AVATAR + window.util.getRandomItem(1, AVATAR_NUMBER) + FormatMap.AVATAR,
         names: window.util.getRandomElemFromArr(mocks.names),
         descriptions: window.util.getRandomElemFromArr(mocks.descriptions),
         likes: window.util.getRandomItem(LIKES_MIN, LIKES_MAX),
