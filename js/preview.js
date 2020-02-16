@@ -64,7 +64,7 @@
   };
 
   bigPictureClose.addEventListener('click', onBigPictureCloseClick);
-  document.addEventListener('keycode', onBigPictureCloseEnterKeydown);
+  document.addEventListener('keydown', onBigPictureCloseEnterKeydown);
 
   // Изменение размера
 
@@ -97,24 +97,3 @@
 
 })();
 
-// Изменение размера
-
-// var onScaleSmallerClick = function () {
-//   var scaleValue = scaleControlValue.substring(0, scaleControlValue.length - 1);
-//   scaleControlValue = scaleValue - 25 + '%';
-//   return scaleControlValue;
-// };
-
-// var onScaleBiggerClick = function () {
-//   scaleControlValue += 25 + '%';
-// };
-
-// scaleControlSmaller.addEventListener('click', onScaleSmallerClick);
-// scaleControlBigger.addEventListener('click', onScaleBiggerClick);
-
-// var setScale = function (value) {
-//   var scale = value / ONE_HUNDRED_PERCENT;
-//   return scale;
-// };
-
-// setScale(scaleControlValue);

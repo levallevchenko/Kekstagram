@@ -14,6 +14,8 @@
   var imageUploadForm = imageUpload.querySelector('.img-upload__form');
   var hashtagsInput = imageSetup.querySelector('.text__hashtags');
   var imageComment = imageSetup.querySelector('.text__description');
+  var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
+  var originEffectValue = window.slider.effectLevelValue.value = '';
 
   imageSetup.classList.remove('hidden');
 
@@ -40,6 +42,8 @@
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
+    window.slider.applyEffect(originEffectValue);
+    imageUploadPreviewImage.classList = '';
   };
 
   uploadCancel.addEventListener('click', function () {
@@ -111,6 +115,8 @@
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
+    window.slider.applyEffect(originEffectValue);
+    imageUploadPreviewImage.classList = '';
   };
 
   hashtagsInput.addEventListener('input', function () {
