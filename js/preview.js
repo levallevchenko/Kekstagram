@@ -94,13 +94,8 @@
   scaleControlSmaller.addEventListener('click', onScaleSmallerClick);
   scaleControlBigger.addEventListener('click', onScaleBiggerClick);
 
-<<<<<<< HEAD
-})();
-
-=======
   window.preview = {
     fillComment: fillComment,
   };
 
 })();
->>>>>>> 27427701fee3d510493abef901b54e2003d62d6e
