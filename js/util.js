@@ -1,7 +1,5 @@
 'use strict';
 
-// util.js
-
 window.util = (function () {
   var ESC_KEYCODE = 'Escape';
   var ENTER_KEYCODE = 'Enter';
@@ -24,4 +22,5 @@ window.util = (function () {
       }
     }
   };
+
 })();

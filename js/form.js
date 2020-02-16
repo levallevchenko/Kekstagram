@@ -1,7 +1,5 @@
 'use strict';
 
-// form.js
-
 (function () {
 
   var MAX_HASHTAG_LENGTH = 20;
@@ -118,4 +116,5 @@
   });
 
   imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
+
 }());

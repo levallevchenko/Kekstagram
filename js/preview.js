@@ -1,6 +1,5 @@
 'use strict';
 
-// preview.js
 (function () {
   var ONE_HUNDRED_PERCENT = 100;
   var bigPicture = document.querySelector('.big-picture');
@@ -95,26 +94,8 @@
   scaleControlSmaller.addEventListener('click', onScaleSmallerClick);
   scaleControlBigger.addEventListener('click', onScaleBiggerClick);
 
+  window.preview = {
+    fillComment: fillComment,
+  };
+
 })();
-
-// Изменение размера
-
-// var onScaleSmallerClick = function () {
-//   var scaleValue = scaleControlValue.substring(0, scaleControlValue.length - 1);
-//   scaleControlValue = scaleValue - 25 + '%';
-//   return scaleControlValue;
-// };
-
-// var onScaleBiggerClick = function () {
-//   scaleControlValue += 25 + '%';
-// };
-
-// scaleControlSmaller.addEventListener('click', onScaleSmallerClick);
-// scaleControlBigger.addEventListener('click', onScaleBiggerClick);
-
-// var setScale = function (value) {
-//   var scale = value / ONE_HUNDRED_PERCENT;
-//   return scale;
-// };
-
-// setScale(scaleControlValue);
