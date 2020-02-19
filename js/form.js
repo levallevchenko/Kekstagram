@@ -17,6 +17,13 @@
 
   imageSetup.classList.remove('hidden');
 
+  var uploadCancel = imageUpload.querySelector('#upload-cancel');
+
+
+  var onCloseUploadSetupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closeUploadSetup);
+  };
+
   var openUploadSetup = function () {
     imageSetup.classList.remove('hidden');
     document.addEventListener('keydown', onCloseUploadSetupEscPress);
@@ -26,17 +33,10 @@
     openUploadSetup();
   });
 
-  var uploadCancel = imageUpload.querySelector('#upload-cancel');
-
-  var onCloseUploadSetupEscPress = function (evt) {
-    if (evt.key === window.util.ESC_KEYCODE) {
-      closeUploadSetup();
-    }
-  };
-
   var closeUploadSetup = function () {
     imageSetup.classList.add('hidden');
     document.removeEventListener('keydown', onCloseUploadSetupEscPress);
+    hashtagsInput.setCustomValidity('');
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
@@ -49,62 +49,48 @@
   });
 
   var onHashtagInputInput = function () {
+    var error = '';
     var hashtagsValue = hashtagsInput.value;
     var hashtagsValueLower = hashtagsValue.toLowerCase();
-    var hashtagsArr = hashtagsValueLower.trim().split(' ');
+    var hashtagsArray = hashtagsValueLower.trim().split(' ');
 
-    if (hashtagsValue === '') {
-      hashtagsInput.setCustomValidity('');
-      return;
+    for (var i = 0; i < hashtagsArray.length; i++) {
+      var allWordsStartWithHash = hashtagsArray[i].indexOf('#') === 0;
+      var getMaxHashLength = hashtagsArray[i].length < MAX_HASHTAG_LENGTH;
+      var checkWordsConsist = REG.test(hashtagsArray[i].slice(1));
+      var isSameInArray = hashtagsArray.indexOf(hashtagsArray[i], i + 1) !== -1;
+
+      if (hashtagsValue === '') {
+        break;
+      }
+      if (!allWordsStartWithHash) {
+        error = 'Хэш-тег должен начинаться с символа #';
+        break;
+      }
+      if (!getMaxHashLength) {
+        error = 'Длина хеш-тега не должна быть больше 20 символов';
+        break;
+      }
+      if (hashtagsArray.length > MAX_HASHTAGS) {
+        error = 'Должно быть не больше 5 хештегов';
+        break;
+      }
+      if (!checkWordsConsist) {
+        error = 'Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы и символы';
+        break;
+      }
+      if (isSameInArray) {
+        error = 'Один и тот же хэш-тег не может быть использован дважды';
+        break;
+      }
     }
+    hashtagsInput.setCustomValidity(error);
+  };
 
-    var allWordsStartWithHash = hashtagsArr.every(function (word) {
-      return word.indexOf('#') === 0;
-    });
-
-    if (!allWordsStartWithHash) {
-      hashtagsInput.setCustomValidity('Хэш-тег должен начинаться с символа #');
-      return;
+  var onCommentInput = function () {
+    if (imageComment.textLength > 140) {
+      imageComment.setCustomValidity('Комментарий не должен быть больше 140 символов');
     }
-
-    var getMaxHashLength = hashtagsArr.every(function (word) {
-      return word.length < MAX_HASHTAG_LENGTH;
-    });
-    if (!getMaxHashLength) {
-      hashtagsInput.setCustomValidity('Длина хеш-тега не должна быть больше 20 символов');
-      return;
-    }
-
-    if (hashtagsArr.length > MAX_HASHTAGS) {
-      hashtagsInput.setCustomValidity('Должно быть не больше 5 хештегов');
-      return;
-    }
-
-    var checkWordsConsist = hashtagsArr.every(function (word) {
-      return REG.test(word.slice(1));
-    });
-    if (!checkWordsConsist) {
-      hashtagsInput.setCustomValidity('Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы и символы');
-      return;
-    }
-
-    var getSameHashtags = function () {
-      var result;
-      hashtagsArr.forEach(function (hashtag, index, arr) {
-        var isInArray = arr.indexOf(hashtag, index + 1) !== -1;
-        if (!result && isInArray) {
-          result = true;
-        }
-      });
-      return result;
-    };
-
-    if (getSameHashtags()) {
-      hashtagsInput.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
-      return;
-    }
-
-    hashtagsInput.setCustomValidity('');
   };
 
   var onImageUploadFormSubmit = function (evt) {
@@ -119,6 +105,10 @@
 
   hashtagsInput.addEventListener('input', function () {
     onHashtagInputInput();
+  });
+
+  imageComment.addEventListener('input', function () {
+    onCommentInput();
   });
 
   imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);

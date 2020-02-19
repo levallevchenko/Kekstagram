@@ -6,7 +6,7 @@
 
   var getPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
-
+    pictureElement.querySelector('.picture__img').dataset.id = picture.id;
     pictureElement.querySelector('.picture__img').src = picture.url;
     pictureElement.querySelector('.picture__likes').textContent = picture.likes;
 
