@@ -1,8 +1,10 @@
 'use strict';
 
 (function () {
-  var ONE_HUNDRED_PERCENT = 100;
 
+  var pictures = window.gallery.pictures;
+  var picturesList = document.querySelector('.pictures');
+  var pictureElement = picturesList.querySelector('.picture');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
   var bigPictureImage = bigPicture.querySelector('.big-picture__img img');
@@ -10,19 +12,12 @@
   var pictureCommentsNumber = bigPicture.querySelector('.comments-count');
   var pictureCaption = bigPicture.querySelector('.social__caption');
 
-  var socialCommentsList = bigPicture.querySelector('.social__comments');
   var socialComment = bigPicture.querySelector('.social__comment');
+  var socialCommentsList = bigPicture.querySelector('.social__comments');
   var socialCommentCount = bigPicture.querySelector('.social__comment-count');
   var commentsLoader = bigPicture.querySelector('.comments-loader');
+
   var comment = socialComment.cloneNode(true);
-
-  var imageUpload = document.querySelector('.img-upload');
-  var scaleControl = imageUpload.querySelector('.scale__control--value');
-  var scaleControlSmaller = imageUpload.querySelector('.scale__control--smaller');
-  var scaleControlBigger = imageUpload.querySelector('.scale__control--bigger');
-  var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
-
-  // bigPicture.classList.remove('hidden');
 
   var fillBigPicture = function (picture) {
     bigPictureImage.src = picture.url;
@@ -43,8 +38,6 @@
     window.util.isEnterEvent(evt, openFullScreen);
   };
 
-  pictureElement.addEventListener('keydown', onPictureElementEnterPress);
-
   var onPictureElementClick = function (evt) {
     var index = evt.target.dataset.id;
     fillBigPicture(pictures[index]);
@@ -53,6 +46,7 @@
   };
 
   picturesList.addEventListener('click', onPictureElementClick);
+  picturesList.addEventListener('keydown', onPictureElementEnterPress);
 
   var onBigPictureCloseEscPress = function (evt) {
     window.util.isEscEvent(evt, closeFullScreen);
@@ -61,11 +55,13 @@
   var openFullScreen = function () {
     bigPicture.classList.remove('hidden');
     document.addEventListener('keydown', onBigPictureCloseEscPress);
+    document.removeEventListener('keydown', onPictureElementEnterPress);
     document.querySelector('body').classList.add('modal-open');
   };
 
   var closeFullScreen = function () {
     bigPicture.classList.add('hidden');
+    picturesList.addEventListener('keydown', onPictureElementEnterPress);
     document.removeEventListener('keydown', onBigPictureCloseEscPress);
     document.querySelector('body').classList.remove('modal-open');
   };
@@ -75,37 +71,9 @@
   };
 
   bigPictureClose.addEventListener('click', onBigPictureCloseClick);
+  picturesList.addEventListener('keydown', onPictureElementEnterPress);
 
-  document.addEventListener('keydown', onBigPictureCloseEnterKeydown);
-
-  // Изменение размера
-
-  var setScale = function (value) {
-    var ScaleValue = value.substring(0, scaleControl.value.length - 1);
-    var scaleNumber = ScaleValue / ONE_HUNDRED_PERCENT;
-
-    imageUploadPreviewImage.style.transform = 'scale' + '(' + scaleNumber + ')';
-  };
-
-  var onScaleSmallerClick = function () {
-    var scaleValue = scaleControl.value.substring(0, scaleControl.value.length - 1);
-    if (scaleValue > 25) {
-      scaleControl.value = scaleValue - 25 + '%';
-    }
-    setScale(scaleControl.value);
-  };
-
-  var onScaleBiggerClick = function () {
-    var scaleValue = scaleControl.value.substring(0, scaleControl.value.length - 1);
-    var scaleValueNumber = parseInt(scaleValue, 10);
-    if (scaleValueNumber < 100) {
-      scaleControl.value = scaleValueNumber + 25 + '%';
-    }
-    setScale(scaleControl.value);
-  };
-
-  scaleControlSmaller.addEventListener('click', onScaleSmallerClick);
-  scaleControlBigger.addEventListener('click', onScaleBiggerClick);
+  // document.addEventListener('keydown', onBigPictureCloseEnterKeydown);
 
   window.preview = {
     fillComment: fillComment,

@@ -2,7 +2,8 @@
 
 (function () {
 
-  var MAX_HASHTAG_LENGTH = 20;
+  var MAX_HASHTAGS_LENGTH = 20;
+  var MAX_COMMENTS_LENGTH = 140;
   var MAX_HASHTAGS = 5;
   var REG = /^[а-яА-ЯёЁa-zA-Z0-9]+$/;
 
@@ -13,12 +14,9 @@
   var hashtagsInput = imageSetup.querySelector('.text__hashtags');
   var imageComment = imageSetup.querySelector('.text__description');
   var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
-  var originEffectValue = window.slider.effectLevelValue.value = '';
-
-  imageSetup.classList.remove('hidden');
+  var defaultEffectValue = window.setup.effectLevelValue.value = '';
 
   var uploadCancel = imageUpload.querySelector('#upload-cancel');
-
 
   var onCloseUploadSetupEscPress = function (evt) {
     window.util.isEscEvent(evt, closeUploadSetup);
@@ -40,7 +38,8 @@
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
-    window.slider.applyEffect(originEffectValue);
+    hashtagsInput.setCustomValidity('');
+    window.setup.applyEffect(defaultEffectValue);
     imageUploadPreviewImage.classList = '';
   };
 
@@ -56,7 +55,7 @@
 
     for (var i = 0; i < hashtagsArray.length; i++) {
       var allWordsStartWithHash = hashtagsArray[i].indexOf('#') === 0;
-      var getMaxHashLength = hashtagsArray[i].length < MAX_HASHTAG_LENGTH;
+      var getMaxHashLength = hashtagsArray[i].length < MAX_HASHTAGS_LENGTH;
       var checkWordsConsist = REG.test(hashtagsArray[i].slice(1));
       var isSameInArray = hashtagsArray.indexOf(hashtagsArray[i], i + 1) !== -1;
 
@@ -88,7 +87,7 @@
   };
 
   var onCommentInput = function () {
-    if (imageComment.textLength > 140) {
+    if (imageComment.textLength > MAX_COMMENTS_LENGTH) {
       imageComment.setCustomValidity('Комментарий не должен быть больше 140 символов');
     }
   };

@@ -1,8 +1,8 @@
 'use strict';
 
 window.util = (function () {
-  var ESC_KEYCODE = 'Escape';
-  var ENTER_KEYCODE = 'Enter';
+  var ESC_KEYNAME = 'Escape';
+  var ENTER_KEYNAME = 'Enter';
 
   return {
     getRandomItem: function (min, max) {
@@ -12,12 +12,12 @@ window.util = (function () {
       return arr[Math.floor(Math.random() * arr.length)];
     },
     isEscEvent: function (evt, action) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.key === ESC_KEYNAME) {
         action();
       }
     },
     isEnterEvent: function (evt, action) {
-      if (evt.keyCode === ENTER_KEYCODE) {
+      if (evt.key === ENTER_KEYNAME) {
         action();
       }
     }
