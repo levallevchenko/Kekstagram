@@ -98,7 +98,7 @@
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
-    window.slider.applyEffect(originEffectValue);
+    window.setup.applyEffect(defaultEffectValue);
     imageUploadPreviewImage.classList = '';
   };
 

@@ -1,10 +1,10 @@
 'use strict';
 
 (function () {
-
+  var onSuccessLoad = window.gallery.onSuccessLoad;
   var pictures = window.gallery.pictures;
   var picturesList = document.querySelector('.pictures');
-  var pictureElement = picturesList.querySelector('.picture');
+  // var pictureElement = picturesList.querySelector('.picture');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
   var bigPictureImage = bigPicture.querySelector('.big-picture__img img');
