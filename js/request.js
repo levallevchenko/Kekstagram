@@ -1,29 +1,31 @@
 'use strict';
 
 (function () {
-  var DATA_URL = 'https://js.dump.academy/kekstagram/data';
+  var DATA_URL = 'https://js.dump.academy/kekstagram/dat';
   var UPLOAD_URL = 'https://js.dump.academy/kekstagram/';
   var TIMEOUT_IN_MS = 10000;
   var StatusCode = {
     OK: 200
   };
-  var picturesList = document.querySelector('.pictures');
-  var messageTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var getRequest = function (method, url, onSuccess, onError, data) {
 
     onError = function (message) {
-      var errorMessage = messageTemplate.cloneNode(true);
-      errorMessage.querySelector('.error__title').textContent = message;
-      errorMessage.querySelector('.error__button').style.display = 'none';
-      picturesList.appendChild(errorMessage);
+      var node = document.createElement('div');
+      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; padding: 10px 0; color: #ffe753; background-color: #3c3614';
+      node.style.position = 'absolute';
+      node.style.left = 0;
+      node.style.right = 0;
+      node.style.fontSize = '24px';
+
+      node.textContent = message;
+      document.body.insertAdjacentElement('afterbegin', node);
     };
 
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      // console.log(xhr.response);
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
       } else {
@@ -50,7 +52,7 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
+      onError('Слишком долгая загрузка данных');
     });
 
     xhr.timeout = TIMEOUT_IN_MS;
