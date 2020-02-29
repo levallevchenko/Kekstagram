@@ -1,10 +1,8 @@
 'use strict';
 
 (function () {
-  var onSuccessLoad = window.gallery.onSuccessLoad;
-  var pictures = window.gallery.pictures;
+
   var picturesList = document.querySelector('.pictures');
-  // var pictureElement = picturesList.querySelector('.picture');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
   var bigPictureImage = bigPicture.querySelector('.big-picture__img img');
@@ -12,26 +10,49 @@
   var pictureCommentsNumber = bigPicture.querySelector('.comments-count');
   var pictureCaption = bigPicture.querySelector('.social__caption');
 
-  var socialComment = bigPicture.querySelector('.social__comment');
   var socialCommentsList = bigPicture.querySelector('.social__comments');
+  var socialComment = socialCommentsList.querySelector('.social__comment');
   var socialCommentCount = bigPicture.querySelector('.social__comment-count');
-  var commentsLoader = bigPicture.querySelector('.comments-loader');
+  var defaultCommentNumber = 5;
+  socialCommentsList.innerHTML = '';
 
-  var comment = socialComment.cloneNode(true);
+  var getComment = function (comment) {
+    var commentElement = socialComment.cloneNode(true);
+    var commentAvatar = commentElement.querySelector('.social__picture');
+    var commentText = commentElement.querySelector('.social__text');
+
+    commentAvatar.src = comment.avatar;
+    commentAvatar.alt = comment.name;
+    commentText.textContent = comment.message;
+
+    return commentElement;
+  };
 
   var fillBigPicture = function (picture) {
     bigPictureImage.src = picture.url;
     pictureLikes.textContent = picture.likes;
-    pictureCommentsNumber.textContent = picture.commentsNumber;
-    pictureCaption.textContent = picture.descriptions;
+    pictureCommentsNumber.textContent = picture.comments.length;
+    pictureCaption.textContent = picture.description;
   };
 
-  var fillComment = function (picture) {
-    var socialAvatar = comment.querySelector('.social__picture');
-    var commentText = comment.querySelector('.social__text');
-    socialAvatar.src = picture.avatarUrl;
-    socialAvatar.alt = picture.names;
-    commentText.textContent = picture.commentsText;
+  var fillComment = function (array) {
+    var fragment = document.createDocumentFragment();
+    var commentsNumber = array.comments.length;
+
+    if (commentsNumber < defaultCommentNumber) {
+      defaultCommentNumber = commentsNumber;
+      socialCommentCount.textContent = array.comments.length + ' из ' + array.comments.length + ' комментариев';
+    } else if (commentsNumber >= defaultCommentNumber) {
+      defaultCommentNumber = 5;
+      socialCommentCount.textContent = defaultCommentNumber + ' из ' + array.comments.length + ' комментариев';
+    }
+
+    for (var i = 0; i < defaultCommentNumber; i++) {
+      var currentComment = getComment(array.comments[i]);
+      fragment.appendChild(currentComment);
+    }
+
+    socialCommentsList.appendChild(fragment);
   };
 
   var onPictureElementEnterPress = function (evt) {
@@ -39,9 +60,11 @@
   };
 
   var onPictureElementClick = function (evt) {
-    var index = evt.target.dataset.id;
-    fillBigPicture(pictures[index]);
-    fillComment(pictures[index]);
+    if (evt.target.closest('.picture')) {
+      var index = evt.target.dataset.id;
+    }
+    fillBigPicture(window.gallery.pictures[index]);
+    fillComment(window.gallery.pictures[index]);
     openFullScreen();
   };
 
@@ -60,6 +83,7 @@
   };
 
   var closeFullScreen = function () {
+    socialCommentsList.innerHTML = '';
     bigPicture.classList.add('hidden');
     picturesList.addEventListener('keydown', onPictureElementEnterPress);
     document.removeEventListener('keydown', onBigPictureCloseEscPress);
@@ -72,11 +96,5 @@
 
   bigPictureClose.addEventListener('click', onBigPictureCloseClick);
   picturesList.addEventListener('keydown', onPictureElementEnterPress);
-
-  // document.addEventListener('keydown', onBigPictureCloseEnterKeydown);
-
-  window.preview = {
-    fillComment: fillComment,
-  };
 
 })();
