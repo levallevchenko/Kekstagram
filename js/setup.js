@@ -154,7 +154,6 @@
   imageUploadEffectLevel.style.display = 'none';
   effectsPreview.classList.add('effects__preview--none');
 
-
   var applyEffect = function (value) {
     var effectRadioCurrentValue = imageUpload.querySelector('.effects__radio:checked').value;
     var currentEffectClassName = 'effects__preview--' + effectRadioCurrentValue;

@@ -51,6 +51,7 @@
   var closeUploadSetup = function () {
     imageSetup.classList.add('hidden');
     document.removeEventListener('keydown', onCloseUploadSetupEscPress);
+    setupReset();
   };
 
   uploadCancel.addEventListener('click', function () {
@@ -104,8 +105,7 @@
 
   var onImageUploadFormSubmit = function (evt) {
     evt.preventDefault();
-    imageSetup.classList.add('hidden');
-    setupReset();
+    closeUploadSetup();
   };
 
   hashtagsInput.addEventListener('input', function () {
