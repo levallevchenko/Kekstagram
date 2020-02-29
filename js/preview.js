@@ -56,13 +56,15 @@
   };
 
   var onPictureElementEnterPress = function (evt) {
+    var index = evt.target.dataset.id;
+    fillBigPicture(window.gallery.pictures[index]);
+    fillComment(window.gallery.pictures[index]);
     window.util.isEnterEvent(evt, openFullScreen);
+    socialCommentsList.innerHTML = '';
   };
 
   var onPictureElementClick = function (evt) {
-    if (evt.target.closest('.picture')) {
-      var index = evt.target.dataset.id;
-    }
+    var index = evt.target.closest('.picture').dataset.id;
     fillBigPicture(window.gallery.pictures[index]);
     fillComment(window.gallery.pictures[index]);
     openFullScreen();

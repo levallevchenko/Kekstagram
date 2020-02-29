@@ -17,7 +17,7 @@
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < MAX_PICTURES; i++) {
       var currentPicture = getPicture(array[i]);
-      currentPicture.querySelector('.picture__img').dataset.id = i;
+      currentPicture.dataset.id = i;
       fragment.appendChild(currentPicture);
     }
     picturesList.appendChild(fragment);
