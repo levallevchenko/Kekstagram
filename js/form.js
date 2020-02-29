@@ -15,6 +15,9 @@
   var imageComment = imageSetup.querySelector('.text__description');
   var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
   var defaultEffectValue = window.setup.effectLevelValue.value = '';
+  var imageUploadEffectLevel = imageUpload.querySelector('.img-upload__effect-level');
+  var effectsPreview = imageUpload.querySelector('.effects__preview');
+  var effectsRadio = imageUpload.querySelector('.effects__radio');
 
   var uploadCancel = imageUpload.querySelector('#upload-cancel');
 
@@ -25,22 +28,29 @@
   var openUploadSetup = function () {
     imageSetup.classList.remove('hidden');
     document.addEventListener('keydown', onCloseUploadSetupEscPress);
+    setupReset();
   };
 
   uploadFile.addEventListener('change', function () {
     openUploadSetup();
   });
 
-  var closeUploadSetup = function () {
-    imageSetup.classList.add('hidden');
-    document.removeEventListener('keydown', onCloseUploadSetupEscPress);
-    hashtagsInput.setCustomValidity('');
+  var setupReset = function () {
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
+    imageUploadEffectLevel.style.display = 'none';
+    imageUploadPreviewImage.style.transform = 'none';
     hashtagsInput.setCustomValidity('');
     window.setup.applyEffect(defaultEffectValue);
     imageUploadPreviewImage.classList = '';
+    effectsPreview.classList.add('effects__preview--none');
+
+  };
+
+  var closeUploadSetup = function () {
+    imageSetup.classList.add('hidden');
+    document.removeEventListener('keydown', onCloseUploadSetupEscPress);
   };
 
   uploadCancel.addEventListener('click', function () {
@@ -95,11 +105,7 @@
   var onImageUploadFormSubmit = function (evt) {
     evt.preventDefault();
     imageSetup.classList.add('hidden');
-    uploadFile.value = '';
-    hashtagsInput.value = '';
-    imageComment.value = '';
-    window.setup.applyEffect(defaultEffectValue);
-    imageUploadPreviewImage.classList = '';
+    setupReset();
   };
 
   hashtagsInput.addEventListener('input', function () {

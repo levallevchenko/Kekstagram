@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var DATA_URL = 'https://js.dump.academy/kekstagram/dat';
+  var DATA_URL = 'https://js.dump.academy/kekstagram/data';
   var UPLOAD_URL = 'https://js.dump.academy/kekstagram/';
   var TIMEOUT_IN_MS = 10000;
   var StatusCode = {

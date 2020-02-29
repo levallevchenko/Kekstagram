@@ -18,6 +18,8 @@
   var scaleControl = imageUpload.querySelector('.scale__control--value');
   var scaleControlSmaller = imageUpload.querySelector('.scale__control--smaller');
   var scaleControlBigger = imageUpload.querySelector('.scale__control--bigger');
+  var effectsPreview = imageUpload.querySelector('.effects__preview');
+
 
   var FiltersMap = {
     none: {
@@ -150,6 +152,8 @@
   effectLevelPin.addEventListener('mousedown', onMouseDown);
 
   imageUploadEffectLevel.style.display = 'none';
+  effectsPreview.classList.add('effects__preview--none');
+
 
   var applyEffect = function (value) {
     var effectRadioCurrentValue = imageUpload.querySelector('.effects__radio:checked').value;
@@ -197,6 +201,7 @@
 
   window.setup = {
     effectLevelValue: effectLevelValue,
-    applyEffect: applyEffect
+    applyEffect: applyEffect,
+    setScale: setScale,
   };
 })();
