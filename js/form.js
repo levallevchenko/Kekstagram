@@ -14,21 +14,13 @@
   var hashtagsInput = imageSetup.querySelector('.text__hashtags');
   var imageComment = imageSetup.querySelector('.text__description');
   var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
-  var defaultEffectValue = window.setup.effectLevelValue.value = '';
   var imageUploadEffectLevel = imageUpload.querySelector('.img-upload__effect-level');
   var effectsPreview = imageUpload.querySelector('.effects__preview');
-  var effectsRadio = imageUpload.querySelector('.effects__radio');
 
   var uploadCancel = imageUpload.querySelector('#upload-cancel');
 
   var onCloseUploadSetupEscPress = function (evt) {
     window.util.isEscEvent(evt, closeUploadSetup);
-  };
-
-  var openUploadSetup = function () {
-    imageSetup.classList.remove('hidden');
-    document.addEventListener('keydown', onCloseUploadSetupEscPress);
-    setupReset();
   };
 
   uploadFile.addEventListener('change', function () {
@@ -42,16 +34,22 @@
     imageUploadEffectLevel.style.display = 'none';
     imageUploadPreviewImage.style.transform = 'none';
     hashtagsInput.setCustomValidity('');
-    window.setup.applyEffect(defaultEffectValue);
+    window.setup.applyEffect(0);
     imageUploadPreviewImage.classList = '';
     effectsPreview.classList.add('effects__preview--none');
+    imageUploadForm.reset();
+  };
 
+  var openUploadSetup = function () {
+    imageSetup.classList.remove('hidden');
+    document.addEventListener('keydown', onCloseUploadSetupEscPress);
+    setupReset();
   };
 
   var closeUploadSetup = function () {
     imageSetup.classList.add('hidden');
     document.removeEventListener('keydown', onCloseUploadSetupEscPress);
-    setupReset();
+    imageUploadForm.reset();
   };
 
   uploadCancel.addEventListener('click', function () {

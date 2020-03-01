@@ -56,15 +56,24 @@
   };
 
   var onPictureElementEnterPress = function (evt) {
+    window.util.isEnterEvent(evt, openFullScreen);
     var index = evt.target.dataset.id;
+    if (evt.target.closest('.img-upload__wrapper')) {
+      return;
+    }
     fillBigPicture(window.gallery.pictures[index]);
     fillComment(window.gallery.pictures[index]);
-    window.util.isEnterEvent(evt, openFullScreen);
     socialCommentsList.innerHTML = '';
   };
 
   var onPictureElementClick = function (evt) {
-    var index = evt.target.closest('.picture').dataset.id;
+    if (evt.target.classList.contains('.picture')) {
+      var index = evt.target.dataset.id;
+    } else if (evt.target.closest('.picture')) {
+      index = evt.target.closest('.picture').dataset.id;
+    } else if (evt.target.closest('.img-upload__wrapper')) {
+      return;
+    }
     fillBigPicture(window.gallery.pictures[index]);
     fillComment(window.gallery.pictures[index]);
     openFullScreen();

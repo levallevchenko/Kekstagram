@@ -11,15 +11,15 @@
   var getRequest = function (method, url, onSuccess, onError, data) {
 
     onError = function (message) {
-      var node = document.createElement('div');
-      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; padding: 10px 0; color: #ffe753; background-color: #3c3614';
-      node.style.position = 'absolute';
-      node.style.left = 0;
-      node.style.right = 0;
-      node.style.fontSize = '24px';
+      var errorNode = document.createElement('div');
+      errorNode.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; padding: 10px 0; color: #ffe753; background-color: #3c3614';
+      errorNode.style.position = 'absolute';
+      errorNode.style.left = 0;
+      errorNode.style.right = 0;
+      errorNode.style.fontSize = '24px';
 
-      node.textContent = message;
-      document.body.insertAdjacentElement('afterbegin', node);
+      errorNode.textContent = message;
+      document.body.insertAdjacentElement('afterbegin', errorNode);
     };
 
     var xhr = new XMLHttpRequest();

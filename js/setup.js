@@ -74,7 +74,7 @@
     effectLevelPin.style.left = pinLeftString + '%';
     effectLevelDepth.style.width = pinLeftString + '%';
     effectLevelValue.value = pinLeftString;
-    applyEffect(pinLeftString);
+    applyEffect(pinLeft);
   };
 
   effectLevelLine.addEventListener('mouseup', onEffectLevelPinMouseup);
@@ -172,8 +172,8 @@
   // Изменение размера изображения
 
   var setScale = function (value) {
-    var ScaleValue = value.substring(0, scaleControl.value.length - 1);
-    var scaleNumber = ScaleValue / 100;
+    var scaleValue = value.substring(0, scaleControl.value.length - 1);
+    var scaleNumber = scaleValue / 100;
     scaleControl.value = value;
     imageUploadPreviewImage.style.transform = 'scale' + '(' + scaleNumber + ')';
   };
@@ -181,16 +181,16 @@
   var onScaleSmallerClick = function () {
     var currentValue = scaleControl.value.substring(0, scaleControl.value.length - 1);
     if (currentValue > SCALE_STEP) {
-      scaleControl.value = currentValue - SCALE_STEP + '%';
+      currentValue = currentValue - SCALE_STEP;
     }
-    setScale(scaleControl.value);
+    setScale(currentValue + '%');
   };
 
   var onScaleBiggerClick = function () {
     var currentValue = scaleControl.value.substring(0, scaleControl.value.length - 1);
     var currentValueNumber = parseInt(currentValue, 10);
     if (currentValueNumber < 100) {
-      scaleControl.value = currentValueNumber + SCALE_STEP + '%';
+      scaleControl.value = (currentValueNumber + SCALE_STEP) + '%';
     }
     setScale(scaleControl.value);
   };
