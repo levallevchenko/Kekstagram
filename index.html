@@ -58,7 +58,7 @@
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
                   <fieldset class="img-upload__effect-level  effect-level">
-                    <input class="effect-level__value" type="number" name="effect-level" value="100" min="0", max="100">
+                    <input class="effect-level__value" type="number" name="effect-level" value="100" min="0", max="100" step='Any'>
                     <div class="effect-level__line">
                       <div class="effect-level__pin" tabindex="0">Кнопка изменения глубины эффекта фотографии</div>
                       <div class="effect-level__depth">Глубина эффекта фотографии</div>
@@ -119,8 +119,8 @@
 
                 <!-- Добавление хэш-тегов и комментария к изображению -->
                 <fieldset class="img-upload__text text">
-                  <input type="text" class="text__hashtags" name="hashtags" placeholder="#хэш-тег" min="2" max="105">
-                  <textarea class="text__description" name="description" placeholder="Ваш комментарий..."></textarea>
+                  <input type="text" class="text__hashtags" name="hashtags" placeholder="#хэш-тег">
+                  <textarea class="text__description" name="description" placeholder="Ваш комментарий..." maxlength="140"></textarea>
                 </fieldset>
 
                 <!-- Кнопка для отправки данных на сервер -->
@@ -234,10 +234,10 @@
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
 <script src="js/util.js"></script>
-<script src="js/data.js"></script>
+<script src="js/request.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/preview.js"></script>
-<script src="js/slider.js"></script>
+<script src="js/setup.js"></script>
 <script src="js/form.js"></script>
 </body>
 </html>

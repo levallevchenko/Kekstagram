@@ -2,7 +2,8 @@
 
 (function () {
 
-  var MAX_HASHTAG_LENGTH = 20;
+  var MAX_HASHTAGS_LENGTH = 20;
+  var MAX_COMMENTS_LENGTH = 140;
   var MAX_HASHTAGS = 5;
   var REG = /^[а-яА-ЯёЁa-zA-Z0-9]+$/;
 
@@ -13,35 +14,42 @@
   var hashtagsInput = imageSetup.querySelector('.text__hashtags');
   var imageComment = imageSetup.querySelector('.text__description');
   var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
-  var originEffectValue = window.slider.effectLevelValue.value = '';
-
-  imageSetup.classList.remove('hidden');
+  var imageUploadEffectLevel = imageUpload.querySelector('.img-upload__effect-level');
+  var effectsPreview = imageUpload.querySelector('.effects__preview');
 
   var uploadCancel = imageUpload.querySelector('#upload-cancel');
 
-
   var onCloseUploadSetupEscPress = function (evt) {
     window.util.isEscEvent(evt, closeUploadSetup);
-  };
-
-  var openUploadSetup = function () {
-    imageSetup.classList.remove('hidden');
-    document.addEventListener('keydown', onCloseUploadSetupEscPress);
   };
 
   uploadFile.addEventListener('change', function () {
     openUploadSetup();
   });
 
-  var closeUploadSetup = function () {
-    imageSetup.classList.add('hidden');
-    document.removeEventListener('keydown', onCloseUploadSetupEscPress);
-    hashtagsInput.setCustomValidity('');
+  var setupReset = function () {
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
-    window.slider.applyEffect(originEffectValue);
+    imageUploadEffectLevel.style.display = 'none';
+    imageUploadPreviewImage.style.transform = 'none';
+    hashtagsInput.setCustomValidity('');
+    window.setup.applyEffect(0);
     imageUploadPreviewImage.classList = '';
+    effectsPreview.classList.add('effects__preview--none');
+    imageUploadForm.reset();
+  };
+
+  var openUploadSetup = function () {
+    imageSetup.classList.remove('hidden');
+    document.addEventListener('keydown', onCloseUploadSetupEscPress);
+    setupReset();
+  };
+
+  var closeUploadSetup = function () {
+    imageSetup.classList.add('hidden');
+    document.removeEventListener('keydown', onCloseUploadSetupEscPress);
+    imageUploadForm.reset();
   };
 
   uploadCancel.addEventListener('click', function () {
@@ -56,7 +64,7 @@
 
     for (var i = 0; i < hashtagsArray.length; i++) {
       var allWordsStartWithHash = hashtagsArray[i].indexOf('#') === 0;
-      var getMaxHashLength = hashtagsArray[i].length < MAX_HASHTAG_LENGTH;
+      var getMaxHashLength = hashtagsArray[i].length < MAX_HASHTAGS_LENGTH;
       var checkWordsConsist = REG.test(hashtagsArray[i].slice(1));
       var isSameInArray = hashtagsArray.indexOf(hashtagsArray[i], i + 1) !== -1;
 
@@ -88,19 +96,14 @@
   };
 
   var onCommentInput = function () {
-    if (imageComment.textLength > 140) {
+    if (imageComment.textLength > MAX_COMMENTS_LENGTH) {
       imageComment.setCustomValidity('Комментарий не должен быть больше 140 символов');
     }
   };
 
   var onImageUploadFormSubmit = function (evt) {
     evt.preventDefault();
-    imageSetup.classList.add('hidden');
-    uploadFile.value = '';
-    hashtagsInput.value = '';
-    imageComment.value = '';
-    window.slider.applyEffect(originEffectValue);
-    imageUploadPreviewImage.classList = '';
+    closeUploadSetup();
   };
 
   hashtagsInput.addEventListener('input', function () {

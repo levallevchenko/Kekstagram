@@ -2,8 +2,8 @@
 
 (function () {
 
-  var ONE_HUNDRED_PERCENT = 100;
-  var EFFECT_PIN_LEFT_START = '100%';
+  var DEFAULT_EFFECT_LEVEL = 100;
+  var SCALE_STEP = 25;
 
   var imageUpload = document.querySelector('.img-upload');
   var effectLevelValue = imageUpload.querySelector('.effect-level__value');
@@ -13,6 +13,13 @@
 
   var effectsRadios = imageUpload.querySelectorAll('.effects__radio');
   var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
+  var imageUploadEffectLevel = imageUpload.querySelector('.img-upload__effect-level');
+
+  var scaleControl = imageUpload.querySelector('.scale__control--value');
+  var scaleControlSmaller = imageUpload.querySelector('.scale__control--smaller');
+  var scaleControlBigger = imageUpload.querySelector('.scale__control--bigger');
+  var effectsPreview = imageUpload.querySelector('.effects__preview');
+
 
   var FiltersMap = {
     none: {
@@ -56,7 +63,7 @@
   // Перемещение ползунка по клику
   var onEffectLevelPinMouseup = function (evt) {
     var effectLevelLineWidth = effectLevelLine.offsetWidth;
-    var onePercentEffectLevelLineWidth = effectLevelLineWidth / ONE_HUNDRED_PERCENT;
+    var onePercentEffectLevelLineWidth = effectLevelLineWidth / 100;
     var pinLeft = evt.offsetX / onePercentEffectLevelLineWidth;
     var pinLeftString = String(pinLeft);
     var target = evt.target;
@@ -67,17 +74,17 @@
     effectLevelPin.style.left = pinLeftString + '%';
     effectLevelDepth.style.width = pinLeftString + '%';
     effectLevelValue.value = pinLeftString;
-    applyEffect(pinLeftString);
+    applyEffect(pinLeft);
   };
 
   effectLevelLine.addEventListener('mouseup', onEffectLevelPinMouseup);
 
   var onEffectsListChange = function () {
     imageUploadPreviewImage.classList = '';
-    effectLevelValue.value = ONE_HUNDRED_PERCENT;
-    effectLevelPin.style.left = EFFECT_PIN_LEFT_START;
-    effectLevelDepth.style.width = EFFECT_PIN_LEFT_START;
-    applyEffect(ONE_HUNDRED_PERCENT);
+    effectLevelValue.value = DEFAULT_EFFECT_LEVEL;
+    effectLevelPin.style.left = DEFAULT_EFFECT_LEVEL + '%';
+    effectLevelDepth.style.width = DEFAULT_EFFECT_LEVEL + '%';
+    applyEffect(DEFAULT_EFFECT_LEVEL);
   };
 
   effectsRadios.forEach(function (radio) {
@@ -89,7 +96,7 @@
   var onMouseDown = function (evt) {
     evt.preventDefault();
     var effectLevelLineWidth = effectLevelLine.offsetWidth;
-    var onePercentEffectLevelLineWidth = effectLevelLineWidth / ONE_HUNDRED_PERCENT;
+    var onePercentEffectLevelLineWidth = effectLevelLineWidth / 100;
 
     var startCoords = {
       x: evt.clientX
@@ -144,21 +151,56 @@
 
   effectLevelPin.addEventListener('mousedown', onMouseDown);
 
+  imageUploadEffectLevel.style.display = 'none';
+  effectsPreview.classList.add('effects__preview--none');
+
   var applyEffect = function (value) {
     var effectRadioCurrentValue = imageUpload.querySelector('.effects__radio:checked').value;
     var currentEffectClassName = 'effects__preview--' + effectRadioCurrentValue;
     imageUploadPreviewImage.classList.add(currentEffectClassName);
     var effectSettings = FiltersMap[effectRadioCurrentValue];
-    var valueInUnit = value * effectSettings.max / ONE_HUNDRED_PERCENT;
+    var valueInUnit = value * effectSettings.max / 100;
     var effectStyle = effectSettings.type + '(' + valueInUnit + effectSettings.unit + ')';
+    imageUploadEffectLevel.style.display = 'block';
     if (effectSettings.type === 'none') {
       effectStyle = effectSettings.type;
+      imageUploadEffectLevel.style.display = 'none';
     }
     imageUploadPreviewImage.style.filter = effectStyle;
   };
 
-  window.slider = {
+  // Изменение размера изображения
+
+  var setScale = function (value) {
+    var scaleValue = value.substring(0, scaleControl.value.length - 1);
+    var scaleNumber = scaleValue / 100;
+    scaleControl.value = value;
+    imageUploadPreviewImage.style.transform = 'scale' + '(' + scaleNumber + ')';
+  };
+
+  var onScaleSmallerClick = function () {
+    var currentValue = scaleControl.value.substring(0, scaleControl.value.length - 1);
+    if (currentValue > SCALE_STEP) {
+      currentValue = currentValue - SCALE_STEP;
+    }
+    setScale(currentValue + '%');
+  };
+
+  var onScaleBiggerClick = function () {
+    var currentValue = scaleControl.value.substring(0, scaleControl.value.length - 1);
+    var currentValueNumber = parseInt(currentValue, 10);
+    if (currentValueNumber < 100) {
+      scaleControl.value = (currentValueNumber + SCALE_STEP) + '%';
+    }
+    setScale(scaleControl.value);
+  };
+
+  scaleControlSmaller.addEventListener('click', onScaleSmallerClick);
+  scaleControlBigger.addEventListener('click', onScaleBiggerClick);
+
+  window.setup = {
     effectLevelValue: effectLevelValue,
-    applyEffect: applyEffect
+    applyEffect: applyEffect,
+    setScale: setScale,
   };
 })();
