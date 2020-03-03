@@ -5,6 +5,7 @@
   var MAX_HASHTAGS_LENGTH = 20;
   var MAX_COMMENTS_LENGTH = 140;
   var MAX_HASHTAGS = 5;
+  var DEFAULT_SCALE = 1;
   var REG = /^[а-яА-ЯёЁa-zA-Z0-9]+$/;
 
   var imageUpload = document.querySelector('.img-upload');
@@ -14,10 +15,16 @@
   var hashtagsInput = imageSetup.querySelector('.text__hashtags');
   var imageComment = imageSetup.querySelector('.text__description');
   var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
-  var imageUploadEffectLevel = imageUpload.querySelector('.img-upload__effect-level');
-  var effectsPreview = imageUpload.querySelector('.effects__preview');
 
   var uploadCancel = imageUpload.querySelector('#upload-cancel');
+
+  var uploudSuccessMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  var uploudErrorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  var main = document.querySelector('main');
+  var successUploadMessage = uploudSuccessMessageTemplate.cloneNode(true);
+  var errorUploadMessage = uploudErrorMessageTemplate.cloneNode(true);
+  var successButton = successUploadMessage.querySelector('.success__button');
+  var errorButton = errorUploadMessage.querySelector('.error__button');
 
   var onCloseUploadSetupEscPress = function (evt) {
     window.util.isEscEvent(evt, closeUploadSetup);
@@ -28,28 +35,28 @@
   });
 
   var setupReset = function () {
+    imageUploadForm.reset();
+
+    imageUploadPreviewImage.classList = '';
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
-    imageUploadEffectLevel.style.display = 'none';
-    imageUploadPreviewImage.style.transform = 'none';
-    hashtagsInput.setCustomValidity('');
+
+    imageUploadPreviewImage.style.transform = 'scale' + '(' + DEFAULT_SCALE + ')';
     window.setup.applyEffect(0);
-    imageUploadPreviewImage.classList = '';
-    effectsPreview.classList.add('effects__preview--none');
-    imageUploadForm.reset();
   };
 
   var openUploadSetup = function () {
     imageSetup.classList.remove('hidden');
     document.addEventListener('keydown', onCloseUploadSetupEscPress);
-    setupReset();
+    imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
   };
 
   var closeUploadSetup = function () {
     imageSetup.classList.add('hidden');
     document.removeEventListener('keydown', onCloseUploadSetupEscPress);
-    imageUploadForm.reset();
+    imageUploadForm.removeEventListener('submit', onImageUploadFormSubmit);
+    setupReset();
   };
 
   uploadCancel.addEventListener('click', function () {
@@ -93,6 +100,12 @@
       }
     }
     hashtagsInput.setCustomValidity(error);
+
+    if (error) {
+      hashtagsInput.style.border = '2px solid red';
+    } else {
+      hashtagsInput.style.border = 'none';
+    }
   };
 
   var onCommentInput = function () {
@@ -101,7 +114,46 @@
     }
   };
 
+  var showSuccessModal = function () {
+    main.appendChild(successUploadMessage);
+  };
+
+  var showErrorModal = function () {
+    main.appendChild(errorUploadMessage);
+  };
+
+  var onSuccessUploadResult = function () {
+    successUploadMessage.classList.remove('hidden');
+    successUploadMessage.classList.add('success');
+    showSuccessModal();
+  };
+
+  var onErrorUploadResult = function () {
+    errorUploadMessage.classList.add('hidden');
+    errorUploadMessage.classList.add('error');
+    showErrorModal();
+  };
+
+  var closeErrorModal = function () {
+    errorUploadMessage.classList.remove('error');
+    errorUploadMessage.classList.add('hidden');
+  };
+
+  var closeSuccessModal = function () {
+    successUploadMessage.classList.remove('success');
+    successUploadMessage.classList.add('hidden');
+  };
+
+  errorButton.addEventListener('click', function () {
+    closeErrorModal();
+  });
+
+  successButton.addEventListener('click', function () {
+    closeSuccessModal();
+  });
+
   var onImageUploadFormSubmit = function (evt) {
+    window.request.formUpload(new FormData(imageUploadForm), onSuccessUploadResult, onErrorUploadResult);
     evt.preventDefault();
     closeUploadSetup();
   };
@@ -113,7 +165,5 @@
   imageComment.addEventListener('input', function () {
     onCommentInput();
   });
-
-  imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
 
 }());

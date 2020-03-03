@@ -2,6 +2,9 @@
 
 (function () {
 
+  var COMMENTS_STEP = 5;
+  var defaultCommentNumber = COMMENTS_STEP;
+
   var picturesList = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
@@ -13,7 +16,6 @@
   var socialCommentsList = bigPicture.querySelector('.social__comments');
   var socialComment = socialCommentsList.querySelector('.social__comment');
   var socialCommentCount = bigPicture.querySelector('.social__comment-count');
-  var defaultCommentNumber = 5;
   socialCommentsList.innerHTML = '';
 
   var getComment = function (comment) {
@@ -43,7 +45,7 @@
       defaultCommentNumber = commentsNumber;
       socialCommentCount.textContent = array.comments.length + ' из ' + array.comments.length + ' комментариев';
     } else if (commentsNumber >= defaultCommentNumber) {
-      defaultCommentNumber = 5;
+      defaultCommentNumber = COMMENTS_STEP;
       socialCommentCount.textContent = defaultCommentNumber + ' из ' + array.comments.length + ' комментариев';
     }
 
@@ -57,25 +59,32 @@
 
   var onPictureElementEnterPress = function (evt) {
     window.util.isEnterEvent(evt, openFullScreen);
-    var index = evt.target.dataset.id;
-    if (evt.target.closest('.img-upload__wrapper')) {
+
+    var isClickOnPicture = evt.target.classList.contains('picture');
+    var isClickInsidePicture = evt.target.closest('.picture');
+
+    if (!isClickOnPicture && !isClickInsidePicture) {
       return;
     }
-    fillBigPicture(window.gallery.pictures[index]);
-    fillComment(window.gallery.pictures[index]);
+    var imageId = evt.target.dataset.id;
+    fillBigPicture(window.gallery.pictures[imageId]);
+    fillComment(window.gallery.pictures[imageId]);
     socialCommentsList.innerHTML = '';
   };
 
   var onPictureElementClick = function (evt) {
-    if (evt.target.classList.contains('.picture')) {
-      var index = evt.target.dataset.id;
-    } else if (evt.target.closest('.picture')) {
-      index = evt.target.closest('.picture').dataset.id;
-    } else if (evt.target.closest('.img-upload__wrapper')) {
+    var isClickOnPicture = evt.target.classList.contains('picture');
+    var isClickInsidePicture = evt.target.closest('.picture');
+
+    if (!isClickOnPicture && !isClickInsidePicture) {
       return;
     }
-    fillBigPicture(window.gallery.pictures[index]);
-    fillComment(window.gallery.pictures[index]);
+    var imageId = isClickOnPicture ?
+      evt.target.dataset.id :
+      evt.target.closest('.picture').dataset.id;
+
+    fillBigPicture(window.gallery.pictures[imageId]);
+    fillComment(window.gallery.pictures[imageId]);
     openFullScreen();
   };
 
@@ -88,8 +97,8 @@
 
   var openFullScreen = function () {
     bigPicture.classList.remove('hidden');
-    document.addEventListener('keydown', onBigPictureCloseEscPress);
-    document.removeEventListener('keydown', onPictureElementEnterPress);
+    picturesList.addEventListener('keydown', onBigPictureCloseEscPress);
+    picturesList.removeEventListener('keydown', onPictureElementEnterPress);
     document.querySelector('body').classList.add('modal-open');
   };
 

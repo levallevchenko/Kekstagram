@@ -10,18 +10,6 @@
 
   var getRequest = function (method, url, onSuccess, onError, data) {
 
-    onError = function (message) {
-      var errorNode = document.createElement('div');
-      errorNode.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; padding: 10px 0; color: #ffe753; background-color: #3c3614';
-      errorNode.style.position = 'absolute';
-      errorNode.style.left = 0;
-      errorNode.style.right = 0;
-      errorNode.style.fontSize = '24px';
-
-      errorNode.textContent = message;
-      document.body.insertAdjacentElement('afterbegin', errorNode);
-    };
-
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -65,8 +53,8 @@
     getRequest('GET', DATA_URL, onSuccess, onError);
   };
 
-  var formUpload = function (onSuccess, onError) {
-    getRequest('POST', UPLOAD_URL, onSuccess, onError);
+  var formUpload = function (data, onSuccess, onError) {
+    getRequest('POST', UPLOAD_URL, onSuccess, onError, data);
   };
 
   window.request = {
