@@ -181,9 +181,9 @@
   var onScaleSmallerClick = function () {
     var currentValue = scaleControl.value.substring(0, scaleControl.value.length - 1);
     if (currentValue > SCALE_STEP) {
-      currentValue = currentValue - SCALE_STEP;
+      scaleControl.value = (currentValue - SCALE_STEP) + '%';
     }
-    setScale(currentValue + '%');
+    setScale(scaleControl.value);
   };
 
   var onScaleBiggerClick = function () {

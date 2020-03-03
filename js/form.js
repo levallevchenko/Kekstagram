@@ -5,6 +5,7 @@
   var MAX_HASHTAGS_LENGTH = 20;
   var MAX_COMMENTS_LENGTH = 140;
   var MAX_HASHTAGS = 5;
+  var DEFAULT_SCALE = 1;
   var REG = /^[а-яА-ЯёЁa-zA-Z0-9]+$/;
 
   var imageUpload = document.querySelector('.img-upload');
@@ -14,8 +15,6 @@
   var hashtagsInput = imageSetup.querySelector('.text__hashtags');
   var imageComment = imageSetup.querySelector('.text__description');
   var imageUploadPreviewImage = imageUpload.querySelector('.img-upload__preview img');
-  var imageUploadEffectLevel = imageUpload.querySelector('.img-upload__effect-level');
-  var effectsPreview = imageUpload.querySelector('.effects__preview');
 
   var uploadCancel = imageUpload.querySelector('#upload-cancel');
 
@@ -36,30 +35,28 @@
   });
 
   var setupReset = function () {
+    imageUploadForm.reset();
+
+    imageUploadPreviewImage.classList = '';
     uploadFile.value = '';
     hashtagsInput.value = '';
     imageComment.value = '';
-    imageUploadEffectLevel.style.display = 'none';
-    imageUploadPreviewImage.style.transform = 'none';
-    hashtagsInput.setCustomValidity('');
+
+    imageUploadPreviewImage.style.transform = 'scale' + '(' + DEFAULT_SCALE + ')';
     window.setup.applyEffect(0);
-    imageUploadPreviewImage.classList = '';
-    effectsPreview.classList.add('effects__preview--none');
-    imageUploadForm.reset();
   };
 
   var openUploadSetup = function () {
     imageSetup.classList.remove('hidden');
     document.addEventListener('keydown', onCloseUploadSetupEscPress);
     imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
-    setupReset();
   };
 
   var closeUploadSetup = function () {
     imageSetup.classList.add('hidden');
     document.removeEventListener('keydown', onCloseUploadSetupEscPress);
     imageUploadForm.removeEventListener('submit', onImageUploadFormSubmit);
-    imageUploadForm.reset();
+    setupReset();
   };
 
   uploadCancel.addEventListener('click', function () {
@@ -103,6 +100,12 @@
       }
     }
     hashtagsInput.setCustomValidity(error);
+
+    if (error) {
+      hashtagsInput.style.border = '2px solid red';
+    } else {
+      hashtagsInput.style.border = 'none';
+    }
   };
 
   var onCommentInput = function () {
@@ -120,18 +123,24 @@
   };
 
   var onSuccessUploadResult = function () {
+    successUploadMessage.classList.remove('hidden');
+    successUploadMessage.classList.add('success');
     showSuccessModal();
   };
 
   var onErrorUploadResult = function () {
+    errorUploadMessage.classList.add('hidden');
+    errorUploadMessage.classList.add('error');
     showErrorModal();
   };
 
   var closeErrorModal = function () {
+    errorUploadMessage.classList.remove('error');
     errorUploadMessage.classList.add('hidden');
   };
 
   var closeSuccessModal = function () {
+    successUploadMessage.classList.remove('success');
     successUploadMessage.classList.add('hidden');
   };
 
