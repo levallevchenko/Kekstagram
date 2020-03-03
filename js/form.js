@@ -19,6 +19,14 @@
 
   var uploadCancel = imageUpload.querySelector('#upload-cancel');
 
+  var uploudSuccessMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  var uploudErrorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  var main = document.querySelector('main');
+  var successUploadMessage = uploudSuccessMessageTemplate.cloneNode(true);
+  var errorUploadMessage = uploudErrorMessageTemplate.cloneNode(true);
+  var successButton = successUploadMessage.querySelector('.success__button');
+  var errorButton = errorUploadMessage.querySelector('.error__button');
+
   var onCloseUploadSetupEscPress = function (evt) {
     window.util.isEscEvent(evt, closeUploadSetup);
   };
@@ -43,12 +51,14 @@
   var openUploadSetup = function () {
     imageSetup.classList.remove('hidden');
     document.addEventListener('keydown', onCloseUploadSetupEscPress);
+    imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
     setupReset();
   };
 
   var closeUploadSetup = function () {
     imageSetup.classList.add('hidden');
     document.removeEventListener('keydown', onCloseUploadSetupEscPress);
+    imageUploadForm.removeEventListener('submit', onImageUploadFormSubmit);
     imageUploadForm.reset();
   };
 
@@ -101,7 +111,40 @@
     }
   };
 
+  var showSuccessModal = function () {
+    main.appendChild(successUploadMessage);
+  };
+
+  var showErrorModal = function () {
+    main.appendChild(errorUploadMessage);
+  };
+
+  var onSuccessUploadResult = function () {
+    showSuccessModal();
+  };
+
+  var onErrorUploadResult = function () {
+    showErrorModal();
+  };
+
+  var closeErrorModal = function () {
+    errorUploadMessage.classList.add('hidden');
+  };
+
+  var closeSuccessModal = function () {
+    successUploadMessage.classList.add('hidden');
+  };
+
+  errorButton.addEventListener('click', function () {
+    closeErrorModal();
+  });
+
+  successButton.addEventListener('click', function () {
+    closeSuccessModal();
+  });
+
   var onImageUploadFormSubmit = function (evt) {
+    window.request.formUpload(new FormData(imageUploadForm), onSuccessUploadResult, onErrorUploadResult);
     evt.preventDefault();
     closeUploadSetup();
   };
@@ -113,7 +156,5 @@
   imageComment.addEventListener('input', function () {
     onCommentInput();
   });
-
-  imageUploadForm.addEventListener('submit', onImageUploadFormSubmit);
 
 }());
