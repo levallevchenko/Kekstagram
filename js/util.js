@@ -8,8 +8,14 @@ window.util = (function () {
     getRandomItem: function (min, max) {
       return Math.ceil(Math.random() * (max - min) + min);
     },
-    getRandomElemFromArr: function (arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
+    shuffleArray: function (array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
     },
     isEscEvent: function (evt, action) {
       if (evt.key === ESC_KEYNAME) {
