@@ -55,6 +55,8 @@
     }
 
     socialCommentsList.appendChild(fragment);
+
+    return commentsNumber;
   };
 
   var onPictureElementEnterPress = function (evt) {
@@ -66,7 +68,9 @@
     if (!isClickOnPicture && !isClickInsidePicture) {
       return;
     }
-    var imageId = evt.target.dataset.id;
+    var imageId = isClickOnPicture ?
+      evt.target.dataset.id :
+      evt.target.closest('.picture').dataset.id;
     fillBigPicture(window.gallery.pictures[imageId]);
     fillComment(window.gallery.pictures[imageId]);
     socialCommentsList.innerHTML = '';
