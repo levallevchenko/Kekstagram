@@ -19,8 +19,10 @@
 
   var getPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
+    pictureElement.dataset.id = picture.id;
     pictureElement.querySelector('.picture__img').src = picture.url;
     pictureElement.querySelector('.picture__likes').textContent = picture.likes;
+    pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
 
     return pictureElement;
   };
@@ -29,7 +31,6 @@
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < picturesNumber; i++) {
       var currentPicture = getPicture(array[i]);
-      currentPicture.dataset.id = i;
       fragment.appendChild(currentPicture);
     }
     picturesList.appendChild(fragment);
@@ -37,6 +38,9 @@
 
   var onSuccessLoad = function (data, picturesNumber) {
     window.gallery.pictures = data;
+    data.forEach(function (dataItem, index) {
+      dataItem.id = index;
+    });
     picturesNumber = MAX_PICTURES;
     imageFiltersBlock.classList.remove('img-filters--inactive');
 
