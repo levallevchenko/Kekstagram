@@ -70,9 +70,18 @@
     evt.target.classList.add('img-filters__button--active');
   };
 
-  var renderDefaultPictures = function () {
+  var renderDefaultPictures = function (pictures) {
     removePictures();
-    window.request.dataDownload(onSuccessLoad);
+    pictures.sort(function (first, second) {
+      if (first.id > second.id) {
+        return 1;
+      }
+      if (first.id < second.id) {
+        return -1;
+      }
+      return 0;
+    });
+    renderPictures(pictures, MAX_PICTURES);
   };
 
   var renderRandomPictures = function (pictures) {
@@ -91,7 +100,7 @@
     var pictures = window.gallery.pictures;
     switch (filter.id) {
       case FilterId.DEFAULT:
-        renderDefaultPictures();
+        renderDefaultPictures(pictures);
         break;
       case FilterId.RANDOM:
         renderRandomPictures(pictures);
