@@ -112,6 +112,7 @@
     if (imageComment.textLength > MAX_COMMENTS_LENGTH) {
       imageComment.setCustomValidity('Комментарий не должен быть больше 140 символов');
     }
+    document.removeEventListener('keydown', onCloseUploadSetupEscPress);
   };
 
   var showSuccessModal = function () {
