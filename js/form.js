@@ -112,6 +112,7 @@
     if (imageComment.textLength > MAX_COMMENTS_LENGTH) {
       imageComment.setCustomValidity('Комментарий не должен быть больше 140 символов');
     }
+    document.removeEventListener('keydown', onCloseUploadSetupEscPress);
   };
 
   var showSuccessModal = function () {
@@ -151,6 +152,10 @@
   successButton.addEventListener('click', function () {
     closeSuccessModal();
   });
+
+  // var onImageCommentFocus = function () {
+
+  // };
 
   var onImageUploadFormSubmit = function (evt) {
     window.request.formUpload(new FormData(imageUploadForm), onSuccessUploadResult, onErrorUploadResult);
