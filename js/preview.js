@@ -4,6 +4,7 @@
 
   var COMMENTS_STEP = 5;
   var defaultCommentsNumber = COMMENTS_STEP;
+  var targetImage;
 
   var picturesList = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
@@ -12,6 +13,7 @@
   var pictureLikes = bigPicture.querySelector('.likes-count');
   var pictureCommentsNumber = bigPicture.querySelector('.comments-count');
   var pictureCaption = bigPicture.querySelector('.social__caption');
+  var pictures = picturesList.querySelectorAll('.picture');
 
   var socialCommentsList = bigPicture.querySelector('.social__comments');
   var socialComment = socialCommentsList.querySelector('.social__comment');
@@ -84,8 +86,7 @@
       evt.target.dataset.id :
       evt.target.closest('.picture').dataset.id;
 
-    var targetImage =
-      window.gallery.pictures
+    targetImage = window.gallery.pictures
         .find(function (picture) {
           return picture.id === +imageId;
         });
@@ -94,14 +95,16 @@
     fillBigPicture(targetImage);
     fillComments(targetImage.comments, COMMENTS_STEP);
     openFullScreen();
-
-    var onCommentsLoaderButtonClick = function () {
-      socialCommentsCount.textContent = '';
-      fillComments(targetImage.comments, COMMENTS_STEP);
-    };
-    commentsLoaderButton.addEventListener('click', onCommentsLoaderButtonClick);
-
   };
+
+  var onCommentsLoaderButtonClick = function () {
+    socialCommentsCount.textContent = '';
+    if (targetImage) {
+      fillComments(targetImage.comments, COMMENTS_STEP);
+    }
+  };
+  commentsLoaderButton.addEventListener('click', onCommentsLoaderButtonClick);
+
 
   var onPictureElementClick = function (evt) {
     openPreview(evt);
