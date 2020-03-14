@@ -13,7 +13,6 @@
   var pictureLikes = bigPicture.querySelector('.likes-count');
   var pictureCommentsNumber = bigPicture.querySelector('.comments-count');
   var pictureCaption = bigPicture.querySelector('.social__caption');
-  var pictures = picturesList.querySelectorAll('.picture');
 
   var socialCommentsList = bigPicture.querySelector('.social__comments');
   var socialComment = socialCommentsList.querySelector('.social__comment');
