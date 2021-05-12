@@ -6,6 +6,8 @@
 * Студент: [Анна Левченко](https://htmlacademy.ru/profile/id506463).
 * Наставник: [Евгений Алипкин](https://htmlacademy.ru/profile/ealipkin).
 
+[Посмотреть проект можно на GitHub Pages](https://levallevchenko.github.io/Kekstagram/).
+
 ## Технологии, изученные во время курса
 
 * Оcновы JavaScript
